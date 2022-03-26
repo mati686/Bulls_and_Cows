@@ -3,8 +3,9 @@ import random
 
 separator = "-" * 50
 usr_number = 0
-generated_number = 0
+generated_number = 9203
 bulls_cows_dict = {"bull": 0, "cow": 0}
+guess_count = 0
 
 
 def welcome():
@@ -32,7 +33,7 @@ def generate_number():
 
 def user_number():
     global usr_number
-    usr_number = int(input())
+    usr_number = int(input(">>>>"))
     return usr_number
 
 
@@ -51,30 +52,53 @@ def bulls_cows():
     for i, j in enumerate(str(usr_number)):
         if j in str_number and i == str_number.index(j):
             bulls_cows_dict["bull"] += 1
-        elif j in str_number and i >= str_number.index(j):
+        elif j in str_number and i != str_number.index(j):
             bulls_cows_dict["cow"] += 1
 
 
 def s_end(animal: str):
-    if bulls_cows_dict[animal] > 1:
-        return animal + "s"
-    else:
+    if bulls_cows_dict[animal] == 1:
         return animal
+    else:
+        return animal + "s"
+
+
+def counting_guesses():
+    global guess_count
+    guess_count += 1
+
+
+def score(guesses: int) -> str:
+    if guesses > 10:
+        return "not so good..."
+    elif guesses > 5:
+        return "average."
+    else:
+        return "amazing!"
+
+
+def win():
+    print(f"""
+Correct, you've guessed the right number
+in {guess_count} guesses.
+That's {score(guess_count)}
+{separator}
+""")
 
 
 def game():
     while comparison() is False:
         print(f"{bulls_cows_dict['bull']} {s_end('bull')}, {bulls_cows_dict['cow']} {s_end('cow')}")
         print(separator)
+        counting_guesses()
     else:
-        print("Correct, you've guessed the right number")
+        win()
 
 
 def main():
     if __name__ == "__main__":
         welcome()
         generate_number()
-        print(generated_number)
         game()
 
 
